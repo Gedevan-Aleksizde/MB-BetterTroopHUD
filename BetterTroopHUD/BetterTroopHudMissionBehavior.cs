@@ -92,7 +92,7 @@ public class BetterTroopHudMissionBehavior : MissionGauntletBattleUIBase
         base.OnPhotoModeActivated();
         
         // Hide UI
-        _gauntletLayer._gauntletUIContext.ContextAlpha = 0f;
+        _gauntletLayer.UIContext.ContextAlpha = 0f;
     }
 
     public override void OnPhotoModeDeactivated()
@@ -100,6 +100,6 @@ public class BetterTroopHudMissionBehavior : MissionGauntletBattleUIBase
         base.OnPhotoModeDeactivated();
         
         // Un-hide UI
-        _gauntletLayer._gauntletUIContext.ContextAlpha = 1f;
+        _gauntletLayer.UIContext.ContextAlpha = 1f;
     }
 }
