@@ -37,10 +37,10 @@ public class BetterTroopHudVM : ViewModel
     private bool _hasAttachedListeners;
 
     private const int ExpectedNumTroops = 500; // Arbitrary, but may as well be generous when allocating memory
-    private readonly List<float> _troopHealthList = new List<float>(ExpectedNumTroops);
-    private readonly List<float> _troopMountHealthList = new List<float>(ExpectedNumTroops);
-    private readonly List<float> _troopShieldHealthList = new List<float>(ExpectedNumTroops);
-    private readonly List<float> _troopAmmoCountList = new List<float>(ExpectedNumTroops);
+    private readonly List<float> _troopHealthList = new(ExpectedNumTroops);
+    private readonly List<float> _troopMountHealthList = new (ExpectedNumTroops);
+    private readonly List<float> _troopShieldHealthList = new (ExpectedNumTroops);
+    private readonly List<float> _troopAmmoCountList = new (ExpectedNumTroops);
 
     private float _updateInterval = 5f;
     private float _timeSinceLastUpdate = 5f;
@@ -89,18 +89,18 @@ public class BetterTroopHudVM : ViewModel
 
         if (_mission == null)
         {
-            DisplayDebugMessage("BetterTroopsHUD - OnFinalize: Mission is null, cannot detach from formation selection events");
+            DisplayDebugMessage(GameTexts.FindText("BTHUD_warn001").ToString());
             return;
         }
 
         // Clean up listeners
         if (!TryGetPlayerOrderController(_mission, out OrderController? orderController))
         {
-            DisplayMessage("BetterTroopsHUD - OnFinalize: Failed to get player order controller, cannot detach from formation selection events");
+            DisplayMessage(GameTexts.FindText("BTHUD_warn002").ToString());
             return;
         }
 
-        DisplayDebugMessage("OnFinalize: Detached from formation selection events");
+        DisplayDebugMessage(GameTexts.FindText("BTHUD_debug001").ToString());
         orderController.OnSelectedFormationsChanged -= OnSelectedFormationsChanged;
 
         _hasAttachedListeners = false;
@@ -108,7 +108,7 @@ public class BetterTroopHudVM : ViewModel
 
     public void OnMissionModeChange(MissionMode oldMissionMode, bool atStart)
     {
-        DisplayDebugMessage($"[DEBUG] OnMissionModeChange: {oldMissionMode} -> {_mission?.Mode}, atStart: {atStart}");
+        DisplayDebugMessage(GameTexts.FindText("BTHUD_debug002").SetTextVariable("oldMissionMode", oldMissionMode.ToString()).SetTextVariable("missionMode", _mission?.Mode.ToString()).SetTextVariable("atStart", atStart.ToString()).ToString());
 
         // Do not attach multiple times
         if (_hasAttachedListeners) return;
@@ -119,11 +119,11 @@ public class BetterTroopHudVM : ViewModel
         // Setup listeners
         if (!TryGetPlayerOrderController(_mission, out OrderController? orderController))
         {
-            DisplayDebugMessage("Initialize: Failed to get player order controller, cannot attach to formation selection events");
+            DisplayDebugMessage(GameTexts.FindText("BTHUD_warn003").ToString());
             return;
         }
 
-        DisplayDebugMessage("Initialize: Attached to formation selection events");
+        DisplayDebugMessage(GameTexts.FindText("BTHUD_debug003").ToString());
         orderController.OnSelectedFormationsChanged += OnSelectedFormationsChanged;
 
         _hasAttachedListeners = true;
@@ -136,7 +136,7 @@ public class BetterTroopHudVM : ViewModel
         bool hasPressedKey = Input.IsKeyPressed(InputKey.O) && Input.IsKeyDown(InputKey.LeftControl);
         if (_timeSinceLastUpdate < _updateInterval && !hasPressedKey && !force) return;
 
-        if (hasPressedKey) DisplayMessage("[BetterTroopHUD] Refreshed UI");
+        if (hasPressedKey) DisplayMessage(GameTexts.FindText("BTHUD_message001").ToString());
 
         // Reset counter upon ui update
         _timeSinceLastUpdate = 0f;
@@ -180,7 +180,7 @@ public class BetterTroopHudVM : ViewModel
         if (selectedFormations.Count == 0 || _betterTroopHudSettings?.ShowTroopStatsWidget == false)
         {
             // If no selected formations or disabled in config, hide HUD
-            DisplayDebugMessage("[Debug] BattleTick: No selected formations or widget disabled in config, hiding HUD");
+            DisplayDebugMessage(GameTexts.FindText("BTHUD_debug004").ToString());
             ShowTroopHealthBar = false;
             ShowTroopShieldHealthBar = false;
             ShowTroopMountHealthBar = false;
@@ -235,7 +235,7 @@ public class BetterTroopHudVM : ViewModel
 
     private void OnSelectedFormationsChanged()
     {
-        DisplayDebugMessage("OnSelectedFormationsChanged: called");
+        DisplayDebugMessage(GameTexts.FindText("BTHUD_debug005").ToString());
 
         Tick(0, true);
     }
@@ -313,33 +313,33 @@ public class BetterTroopHudVM : ViewModel
 
         if (mission.Mode != MissionMode.Battle && mission.Mode != MissionMode.Stealth)
         {
-            DisplayDebugMessage("[DEBUG] TryGetPlayerOrderController: mission mode is not battle, so no selected formations. Returning");
+            DisplayDebugMessage(GameTexts.FindText("BTHUD_debug006").ToString());
             return false;
         }
 
         if (mission.MainAgent == null)
         {
-            DisplayDebugMessage("[DEBUG] TryGetPlayerOrderController: main agent is null, so no selected formations. Returning");
+            DisplayDebugMessage(GameTexts.FindText("BTHUD_debug007").SetTextVariable("status", "null").ToString());
             return false;
         }
 
         if (mission.MainAgent.Health.ApproximatelyEqualsTo(0.0f))
         {
-            DisplayDebugMessage("[DEBUG] TryGetPlayerOrderController: main agent is dead, so no selected formations. Returning");
+            DisplayDebugMessage(GameTexts.FindText("BTHUD_debug007").SetTextVariable("status", "dead").ToString());
             return false;
         }
 
         Team? playerTeam = mission.PlayerTeam;
         if (playerTeam == null)
         {
-            DisplayDebugMessage("[DEBUG] TryGetPlayerOrderController: mission.PlayerTeam is null, so no selected formations. Returning");
+            DisplayDebugMessage(GameTexts.FindText("BTHUD_debug008").SetTextVariable("object", "mission.PlayerTeam").ToString());
             return false;
         }
 
         orderController = playerTeam.PlayerOrderController;
         if (orderController == null)
         {
-            DisplayDebugMessage("[DEBUG] TryGetPlayerOrderController: orderController is null, so no selected formations. Returning");
+            DisplayDebugMessage(GameTexts.FindText("BTHUD_debug008").SetTextVariable("object", "orderController").ToString());
             return false;
         }
 
@@ -364,20 +364,20 @@ public class BetterTroopHudVM : ViewModel
                 // Skip non-agents
                 if (formationUnit is not Agent agent)
                 {
-                    // DisplayDebugMessage("[DEBUG] UpdateUi: formationUnit is not Agent");
+                    DisplayDebugMessage(GameTexts.FindText("BTHUD_debug011").ToString());
                     continue;
                 }
 
                 // Skip non-human agents
                 if (!agent.IsHuman)
                 {
-                    DisplayDebugMessage("[DEBUG] UpdateUi: agent is not human");
+                    DisplayDebugMessage(GameTexts.FindText("BTHUD_debug009").ToString());
                     continue;
                 }
 
                 // Collect human agent health
                 float prcHealth = agent.Health / agent.HealthLimit;
-                // DisplayDebugMessage($"[DEBUG] UpdateUi: agent is human. Health: {prcHealth:1f}");
+                DisplayDebugMessage(GameTexts.FindText("BTHUD_debug010").SetTextVariable("prcHealth", prcHealth).ToString());
                 _troopHealthList.Add(prcHealth);
 
                 // Collect mount agent health, if applicable
@@ -385,7 +385,7 @@ public class BetterTroopHudVM : ViewModel
                 {
                     Agent mountAgent = agent.MountAgent;
                     float prcMountHealth = mountAgent.Health / mountAgent.HealthLimit;
-                    // DisplayDebugMessage($"[DEBUG] UpdateUi: agent has mount. Health: {prcMountHealth:1f}");
+                    DisplayDebugMessage(GameTexts.FindText("BTHUD_debug012").SetTextVariable("prcMountHealth", prcMountHealth).ToString());
                     _troopMountHealthList.Add(prcMountHealth);
                 }
 
@@ -408,7 +408,7 @@ public class BetterTroopHudVM : ViewModel
                     }
 
                     float prcShieldHealth = (float)totHitPoints / totMaxHitPoints;
-                    // DisplayDebugMessage($"[DEBUG] UpdateUi: agent has shield(s). Health: {prcShieldHealth:1f}");
+                    DisplayDebugMessage(GameTexts.FindText("BTHUD_debug013").SetTextVariable("prcShieldHealth", prcShieldHealth).ToString());
                     _troopShieldHealthList.Add(prcShieldHealth);
                 }
 
@@ -438,7 +438,7 @@ public class BetterTroopHudVM : ViewModel
                     }
 
                     float prcAmmoCount = (float)totAmmo / totMaxAmmo;
-                    // DisplayDebugMessage($"[DEBUG] UpdateUi: agent has ranged weapon. Ammo: {prcAmmoCount:1f}");
+                    DisplayDebugMessage(GameTexts.FindText("BTHUD_debug014").SetTextVariable("prcAmmoCount", prcAmmoCount).ToString());
                     _troopAmmoCountList.Add(prcAmmoCount);
                 }
             }

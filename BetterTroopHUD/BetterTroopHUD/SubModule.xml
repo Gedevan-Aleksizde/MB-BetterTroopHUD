@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Module xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+        xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/BUTR/Bannerlord.XmlSchemas/master/SubModule.xsd" >
+  <Id value="BetterTroopHUD" />
+  <Name value="Better Troop HUD Updated" />
+  <Version value="v1.3.0" />
+  <DefaultModule value="false" />
+  <ModuleCategory value="Singleplayer"/>
+  <ModuleType value="Community" />
+  <Url value="https://www.nexusmods.com/mountandblade2bannerlord/mods/6332" />
+  <DependedModules>
+    <DependedModule Id="Bannerlord.Harmony" DependentVersion="v2.3.0" />
+    <DependedModule Id="Bannerlord.ButterLib" DependentVersion="v2.8.15" />
+    <DependedModule Id="Bannerlord.UIExtenderEx" DependentVersion="v2.8.1" />
+    <DependedModule Id="Bannerlord.MBOptionScreen" DependentVersion="v5.9.2" />
+    <DependedModule Id="Native" DependentVersion="v1.2.10" />
+    <DependedModule Id="SandBoxCore" DependentVersion="v1.2.10" />
+    <DependedModule Id="Sandbox" DependentVersion="v1.2.10" />
+    <DependedModule Id="StoryMode" DependentVersion="v1.2.10" />
+    <DependedModule Id="CustomBattle" DependentVersion="v1.2.10" />
+  </DependedModules>
+  <DependedModuleMetadatas>
+    <DependedModuleMetadata id="Bannerlord.Harmony" order="LoadBeforeThis" version="v2.*" />
+    <DependedModuleMetadata id="Bannerlord.ButterLib" order="LoadBeforeThis" version="v2.*" />
+    <DependedModuleMetadata id="Bannerlord.UIExtenderEx" order="LoadBeforeThis" version="v2.*" />
+    <DependedModuleMetadata id="Bannerlord.MBOptionScreen" order="LoadBeforeThis" version="v5.*" />
+    <DependedModuleMetadata id="Native" order="LoadBeforeThis" version="v1.2.*"/>
+    <DependedModuleMetadata id="SandBoxCore" order="LoadBeforeThis" version="v1.2.*"/>
+    <DependedModuleMetadata id="Sandbox" order="LoadBeforeThis" version="v1.2.*"/>
+    <DependedModuleMetadata id="StoryMode" order="LoadBeforeThis" version="v1.2.*"/>
+    <DependedModuleMetadata id="CustomBattle" order="LoadBeforeThis" version="v1.2.*"/>
+  </DependedModuleMetadatas>
+  <!-- Community Dependency Metadata -->
+  <SubModules>
+    <SubModule>
+      <Name value="BetterTroopHUD" />
+      <DLLName value="BetterTroopHUD.dll" />
+      <SubModuleClassType value="BetterTroopHUD.SubModule" />
+    </SubModule>
+  </SubModules>
+</Module>
