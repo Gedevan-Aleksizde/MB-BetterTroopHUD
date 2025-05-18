@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<strings>
+  <string id="BTHUD_warn001" text="{=BTHUDw001}BetterTroopsHUD - OnFinalize: Mission is null, cannot detach from formation selection events" />
+  <string id="BTHUD_warn002" text="{=BTHUDw002}BetterTroopsHUD - OnFinalize: Failed to get player order controller, cannot detach from formation selection events" />
+  <string id="BTHUD_warn003" text="{=BTHUDw003}Initialize: Failed to get player order controller, cannot attach to formation selection events" />
+  <string id="BTHUD_debug001" text="{=BTHUDd001}OnFinalize: Detached from formation selection events" />
+  <string id="BTHUD_debug002" text="{=BTHUDd002}OnMissionModeChange: {oldMissionMode} -> {missionMode}, atStart: {atStart}" />
+  <string id="BTHUD_debug003" text="{=BTHUDd003}Initialize: Attached to formation selection events" />
+  <string id="BTHUD_debug004" text="{=BTHUDd004}BattleTick: No selected formations or widget disabled in config, hiding HUD" />
+  <string id="BTHUD_debug005" text="{=BTHUDd005}OnSelectedFormationsChanged: called" />
+  <string id="BTHUD_debug006" text="{=BTHUDd006}TryGetPlayerOrderController: mission mode is not battle/deployment, so no selected formations. Returning" />
+  <string id="BTHUD_debug007" text="{=BTHUDd007}TryGetPlayerOrderController: main agent is {status}, so no selected formations. Returning" />
+  <string id="BTHUD_debug008" text="{=BTHUDd008}TryGetPlayerOrderController: {object} is null, so no selected formations. Returning" />
+  <string id="BTHUD_debug009" text="{=BTHUDd009}UpdateUi: agent is not human" />
+  <string id="BTHUD_debug010" text="{=BTHUDd010}UpdateUi: agent is human. Health: {prcHealth:1f}" />
+  <string id="BTHUD_debug011" text="{=BTHUDd011}UpdateUi: formationUnit is not Agent" />
+  <string id="BTHUD_debug012" text="{=BTHUDd012}UpdateUi: agent has mount. Health: {prcMountHealth:1f}" />
+  <string id="BTHUD_debug013" text="{=BTHUDd013}UpdateUi: agent has shield(s). Health: {prcShieldHealth:1f}" />
+  <string id="BTHUD_debug014" text="{=BTHUDd014}UpdateUi: agent has ranged weapon. Ammo: {prcAmmoCount:1f}" />
+  <string id="BTHUD_debug100" text="{=BTHUDd100}EarlyStart: called" />
+  <string id="BTHUD_debug101" text="{=BTHUDd101}OnMissionScreenFinalize: called" />
+  <string id="BTHUD_debug102" text="{=BTHUDd102}AfterStart: called" />
+  <string id="BTHUD_message001" text="{=BTHUDm001}[BetterTroopHUD] Refreshed UI" />
+  
+</strings>

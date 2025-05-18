@@ -11,5 +11,28 @@
   <string id="BTHUDMCM002Hint" text="Enables additional markers that provides more information about your troops." />
   <string id="BTHUDMCM003" text="Update Rate" />
   <string id="BTHUDMCM003Hint" text="Specifies how often the widget should be updated. Will affect performance if set too low." />
+
+  <!-- you don't have to translate. it's not used for ordinary users. -->
+  <string id="BTHUDw001" text="BetterTroopsHUD - OnFinalize: Mission is null, cannot detach from formation selection events" />
+  <string id="BTHUDw002" text="BetterTroopsHUD - OnFinalize: Failed to get player order controller, cannot detach from formation selection events" />
+  <string id="BTHUDw003" text="Initialize: Failed to get player order controller, cannot attach to formation selection events" />
+  <string id="BTHUDd001" text="OnFinalize: Detached from formation selection events" />
+  <string id="BTHUDd002" text="OnMissionModeChange: {oldMissionMode} -> {missionMode}, atStart: {atStart}" />
+  <string id="BTHUDd003" text="Initialize: Attached to formation selection events" />
+  <string id="BTHUDd004" text="BattleTick: No selected formations or widget disabled in config, hiding HUD" />
+  <string id="BTHUDd005" text="OnSelectedFormationsChanged: called" />
+  <string id="BTHUDd006" text="TryGetPlayerOrderController: mission mode is not battle, so no selected formations. Returning" />
+  <string id="BTHUDd007" text="TryGetPlayerOrderController: main agent is {status}, so no selected formations. Returning" />
+  <string id="BTHUDd008" text="TryGetPlayerOrderController: {object} is null, so no selected formations. Returning" />
+  <string id="BTHUDd009" text="UpdateUi: agent is not human" />
+  <string id="BTHUDd010" text="UpdateUi: agent is human. Health: {prcHealth:1f}" />
+  <string id="BTHUDd011" text="UpdateUi: formationUnit is not Agent" />
+  <string id="BTHUDd012" text="UpdateUi: agent has mount. Health: {prcMountHealth:1f}" />
+  <string id="BTHUDd013" text="UpdateUi: agent has shield(s). Health: {prcShieldHealth:1f}" />
+  <string id="BTHUDd014" text="UpdateUi: agent has ranged weapon. Ammo: {prcAmmoCount:1f}" />
+  <string id="BTHUDd100" text="EarlyStart: called" />
+  <string id="BTHUDd101" text="OnMissionScreenFinalize: called" />
+  <string id="BTHUDd102" text="AfterStart: called" />
+  <string id="BTHUDm001" text="[BetterTroopHUD] Refreshed UI" />
   </strings>
 </base>

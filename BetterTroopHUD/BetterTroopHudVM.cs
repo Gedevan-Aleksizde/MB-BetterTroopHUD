@@ -283,7 +283,7 @@ public class BetterTroopHudVM : ViewModel
         // Set default return value
         orderController = null;
 
-        if (mission.Mode != MissionMode.Battle && mission.Mode != MissionMode.Stealth)
+        if (mission.Mode != MissionMode.Battle && mission.Mode != MissionMode.Deployment && mission.Mode != MissionMode.Stealth)
         {
             DisplayDebugMessage($"[DEBUG 006] {GameTexts.FindText("BTHUD_debug006")}");
             return false;
@@ -311,7 +311,7 @@ public class BetterTroopHudVM : ViewModel
         orderController = playerTeam.PlayerOrderController;
         if (orderController == null)
         {
-            DisplayDebugMessage($"DEBUG 009] {GameTexts.FindText("BTHUD_debug008").SetTextVariable("object", "orderController")}");
+            DisplayDebugMessage($"DEBUG 008] {GameTexts.FindText("BTHUD_debug008").SetTextVariable("object", "orderController")}");
             return false;
         }
 
@@ -349,7 +349,7 @@ public class BetterTroopHudVM : ViewModel
 
                 // Collect human agent health
                 float prcHealth = agent.Health / agent.HealthLimit;
-                DisplayDebugMessage($"[DEBUG 010] {GameTexts.FindText("BTHUD_debug010").SetTextVariable("prcHealth", prcHealth)}");
+                DisplayDebugMessage($"[DEBUG 010] {GameTexts.FindText("BTHUD_debug010").SetTextVariable("prcHealth", prcHealth).ToString().ToString()}");
                 _troopHealthList.Add(prcHealth);
 
                 // Collect mount agent health, if applicable
@@ -357,7 +357,7 @@ public class BetterTroopHudVM : ViewModel
                 {
                     Agent mountAgent = agent.MountAgent;
                     float prcMountHealth = mountAgent.Health / mountAgent.HealthLimit;
-                    DisplayDebugMessage($"[DEBUG 012] {GameTexts.FindText("BTHUD_debug012").SetTextVariable("prcMountHealth", prcMountHealth)}");
+                    DisplayDebugMessage($"[DEBUG 012] {GameTexts.FindText("BTHUD_debug012").SetTextVariable("prcMountHealth", prcMountHealth).ToString()}");
                     _troopMountHealthList.Add(prcMountHealth);
                 }
 
@@ -410,7 +410,7 @@ public class BetterTroopHudVM : ViewModel
                     }
 
                     float prcAmmoCount = (float)totAmmo / totMaxAmmo;
-                    DisplayDebugMessage($"[DEBUG 014] {GameTexts.FindText("BTHUD_debug014").SetTextVariable("prcAmmoCount", prcAmmoCount)}");
+                    DisplayDebugMessage($"[DEBUG 014] {GameTexts.FindText("BTHUD_debug014").SetTextVariable("prcAmmoCount", prcAmmoCount).ToString()}");
                     _troopAmmoCountList.Add(prcAmmoCount);
                 }
             }

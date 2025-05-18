@@ -3,21 +3,24 @@
         xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/BUTR/Bannerlord.XmlSchemas/master/SubModule.xsd" >
   <Id value="BetterTroopHUD" />
   <Name value="Better Troop HUD Updated" />
-  <Version value="v1.3.0" />
+  <Version value="v1.3.1" />
   <DefaultModule value="false" />
   <ModuleCategory value="Singleplayer"/>
   <ModuleType value="Community" />
   <Url value="https://www.nexusmods.com/mountandblade2bannerlord/mods/6332" />
+  <DependedModules>
+    <DependedModule Id="Native" DependentVersion="v1.2.12" />
+  </DependedModules>
   <DependedModuleMetadatas>
-    <DependedModuleMetadata id="Bannerlord.Harmony" order="LoadBeforeThis" version="v2.*" />
+    <DependedModuleMetadata id="Bannerlord.Harmony" order="LoadBeforeThis" version="v2.3.*" />
     <DependedModuleMetadata id="Bannerlord.ButterLib" order="LoadBeforeThis" version="v2.*" />
     <DependedModuleMetadata id="Bannerlord.UIExtenderEx" order="LoadBeforeThis" version="v2.*" />
     <DependedModuleMetadata id="Bannerlord.MBOptionScreen" order="LoadBeforeThis" version="v5.*" />
-    <DependedModuleMetadata id="Native" order="LoadBeforeThis" version="v1.2.*"/>
-    <DependedModuleMetadata id="SandBoxCore" order="LoadBeforeThis" version="v1.2.*"/>
-    <DependedModuleMetadata id="Sandbox" order="LoadBeforeThis" version="v1.2.*"/>
-    <DependedModuleMetadata id="StoryMode" order="LoadBeforeThis" version="v1.2.*"/>
-    <DependedModuleMetadata id="CustomBattle" order="LoadBeforeThis" version="v1.2.*"/>
+    <DependedModuleMetadata id="Native" order="LoadBeforeThis" version="v1.2.12"/>
+    <DependedModuleMetadata id="SandBoxCore" order="LoadBeforeThis" version="v1.2.12"/>
+    <DependedModuleMetadata id="Sandbox" order="LoadBeforeThis" version="v1.2.12"/>
+    <DependedModuleMetadata id="StoryMode" order="LoadBeforeThis" version="v1.2.12"/>
+    <DependedModuleMetadata id="CustomBattle" order="LoadBeforeThis" version="v1.2.12"/>
   </DependedModuleMetadatas>
   <!-- Community Dependency Metadata -->
   <SubModules>

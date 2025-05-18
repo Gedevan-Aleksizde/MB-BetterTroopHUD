@@ -26,7 +26,7 @@ public class BetterTroopHudMissionBehavior : MissionGauntletBattleUIBase
     {
         base.AfterStart();
 
-        DisplayDebugMessage("[DEBUG] AfterStart: called");
+        DisplayDebugMessage($"[DEBUG 102] {GameTexts.FindText("BTHUD_debug102")}");
 
         _dataSource?.Initialize();
     }
@@ -37,7 +37,7 @@ public class BetterTroopHudMissionBehavior : MissionGauntletBattleUIBase
     {
         base.OnMissionScreenFinalize();
 
-        DisplayDebugMessage("[DEBUG] OnMissionScreenFinalize: called");
+        DisplayDebugMessage($"[DEBUG 101] {GameTexts.FindText("BTHUD_debug101")}");
 
         ScreenManager.TopScreen.RemoveLayer(_gauntletLayer);
         _gauntletLayer = null;
