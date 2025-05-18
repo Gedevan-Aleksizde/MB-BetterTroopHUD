@@ -15,7 +15,7 @@ public class BetterTroopHudVM : ViewModel
     private readonly BetterTroopHudSettings? _betterTroopHudSettings;
     private MissionPeer? _mpMissionPeer;
     private MissionMultiplayerGameModeBaseClient? _mpGameMode; // Note: Unused for now, can be used for MP-specific features later TODO remove?
-    
+
     private MissionPeer? MpMissionPeer
     {
         get
@@ -38,9 +38,9 @@ public class BetterTroopHudVM : ViewModel
 
     private const int ExpectedNumTroops = 500; // Arbitrary, but may as well be generous when allocating memory
     private readonly List<float> _troopHealthList = new(ExpectedNumTroops);
-    private readonly List<float> _troopMountHealthList = new (ExpectedNumTroops);
-    private readonly List<float> _troopShieldHealthList = new (ExpectedNumTroops);
-    private readonly List<float> _troopAmmoCountList = new (ExpectedNumTroops);
+    private readonly List<float> _troopMountHealthList = new(ExpectedNumTroops);
+    private readonly List<float> _troopShieldHealthList = new(ExpectedNumTroops);
+    private readonly List<float> _troopAmmoCountList = new(ExpectedNumTroops);
 
     private float _updateInterval = 5f;
     private float _timeSinceLastUpdate = 5f;
@@ -89,18 +89,17 @@ public class BetterTroopHudVM : ViewModel
 
         if (_mission == null)
         {
-            DisplayDebugMessage(GameTexts.FindText("BTHUD_warn001").ToString());
+            DisplayDebugMessage($"[WARN 001] {GameTexts.FindText("BTHUD_warn001")}");
             return;
         }
 
-        // Clean up listeners
         if (!TryGetPlayerOrderController(_mission, out OrderController? orderController))
         {
-            DisplayMessage(GameTexts.FindText("BTHUD_warn002").ToString());
+            DisplayDebugMessage($"[WARN 002] {GameTexts.FindText("BTHUD_warn002")}");
             return;
         }
 
-        DisplayDebugMessage(GameTexts.FindText("BTHUD_debug001").ToString());
+        DisplayDebugMessage($"[DEBUG 001] {GameTexts.FindText("BTHUD_debug001")}");
         orderController.OnSelectedFormationsChanged -= OnSelectedFormationsChanged;
 
         _hasAttachedListeners = false;
@@ -108,22 +107,19 @@ public class BetterTroopHudVM : ViewModel
 
     public void OnMissionModeChange(MissionMode oldMissionMode, bool atStart)
     {
-        DisplayDebugMessage(GameTexts.FindText("BTHUD_debug002").SetTextVariable("oldMissionMode", oldMissionMode.ToString()).SetTextVariable("missionMode", _mission?.Mode.ToString()).SetTextVariable("atStart", atStart.ToString()).ToString());
+        string debugmessage = $"[DEBUG 002] {GameTexts.FindText("BTHUD_debug002").SetTextVariable("oldMissionMode", oldMissionMode.ToString()).SetTextVariable("missionMode", _mission?.Mode.ToString()).SetTextVariable("atStart", atStart.ToString())}";
+        DisplayDebugMessage(debugmessage);
 
-        // Do not attach multiple times
         if (_hasAttachedListeners) return;
 
-        // Do not attach if mission is null, would fail
         if (_mission == null) return;
 
-        // Setup listeners
         if (!TryGetPlayerOrderController(_mission, out OrderController? orderController))
         {
-            DisplayDebugMessage(GameTexts.FindText("BTHUD_warn003").ToString());
+            DisplayDebugMessage($"[WARN 003] {GameTexts.FindText("BTHUD_warn003")}");
             return;
         }
 
-        DisplayDebugMessage(GameTexts.FindText("BTHUD_debug003").ToString());
         orderController.OnSelectedFormationsChanged += OnSelectedFormationsChanged;
 
         _hasAttachedListeners = true;
@@ -131,17 +127,14 @@ public class BetterTroopHudVM : ViewModel
 
     public void Tick(float dt, bool force = false)
     {
-        // Check if UI update is needed
         _timeSinceLastUpdate += dt;
         bool hasPressedKey = Input.IsKeyPressed(InputKey.O) && Input.IsKeyDown(InputKey.LeftControl);
         if (_timeSinceLastUpdate < _updateInterval && !hasPressedKey && !force) return;
 
         if (hasPressedKey) DisplayMessage(GameTexts.FindText("BTHUD_message001").ToString());
 
-        // Reset counter upon ui update
         _timeSinceLastUpdate = 0f;
-        
-        // Update update rate, in case config changed
+
         if (_betterTroopHudSettings != null) _updateInterval = _betterTroopHudSettings.UpdateRate;
 
         if (_mission == null) return;
@@ -157,30 +150,24 @@ public class BetterTroopHudVM : ViewModel
 
     private void BattleTick(float dt)
     {
-        // Ensure we are in a battle, and not in a friendly mission
         if ((_mission?.Mode != MissionMode.Battle && _mission?.Mode != MissionMode.Stealth) || _mission.IsFriendlyMission || _mission.MainAgent == null) return;
 
         // If multiplayer TODO test if needed separate checks for MP support
         if (MpMissionPeer != null)
         {
-            // Ensure we are controlling troops
             bool isTroopsActive = MpMissionPeer?.ControlledFormation != null;
             if (!isTroopsActive) return;
-
-            // Ensure we have troops
             int troopCount = MpMissionPeer!.ControlledFormation.CountOfUnits;
             if (troopCount == 0) return;
         }
 
-        // Ensure we have a valid order controller
         if (!TryGetPlayerOrderController(_mission, out OrderController? orderController)) return;
 
-        // Get controlled formations
         MBReadOnlyList<Formation> selectedFormations = orderController.SelectedFormations;
         if (selectedFormations.Count == 0 || _betterTroopHudSettings?.ShowTroopStatsWidget == false)
         {
             // If no selected formations or disabled in config, hide HUD
-            DisplayDebugMessage(GameTexts.FindText("BTHUD_debug004").ToString());
+            DisplayDebugMessage($"[DEBUG 004] {GameTexts.FindText("BTHUD_debug004")}");
             ShowTroopHealthBar = false;
             ShowTroopShieldHealthBar = false;
             ShowTroopMountHealthBar = false;
@@ -189,27 +176,18 @@ public class BetterTroopHudVM : ViewModel
             return;
         }
 
-        // Collect troop stats
         RefreshStoredUnitStats(selectedFormations);
-
-        // Show UI bars
         ShowTroopHealthBar = _troopHealthList.Count > 0;
         ShowTroopShieldHealthBar = _troopShieldHealthList.Count > 0;
         ShowTroopMountHealthBar = _troopMountHealthList.Count > 0;
-        // Show arrow count bar at shield bar position if appropriate
         ShowTopMostTroopArrowCountBar = _troopAmmoCountList.Count > 0 && ShowTroopShieldHealthBar;
         ShowShieldPosTroopArrowCountBar = _troopAmmoCountList.Count > 0 && !ShowTroopShieldHealthBar;
-
-        // Update visibility of bar markers
         ShowWidgetMarkers = _betterTroopHudSettings?.ShowWidgetMarkers == true;
-        
-        // Update UI values
         UpdateUIBarValues();
     }
 
     private void NonBattleTick(float dt)
     {
-        // Reset all values
         ShowTroopHealthBar = false;
         ShowTroopShieldHealthBar = false;
         ShowTroopMountHealthBar = false;
@@ -235,20 +213,17 @@ public class BetterTroopHudVM : ViewModel
 
     private void OnSelectedFormationsChanged()
     {
-        DisplayDebugMessage(GameTexts.FindText("BTHUD_debug005").ToString());
-
+        DisplayDebugMessage($"[DEBUG 005] {GameTexts.FindText("BTHUD_debug005")}");
         Tick(0, true);
     }
 
     private void UpdateUIBarValues()
     {
-        // Sort lists for later median calculation
         _troopHealthList.Sort();
         _troopShieldHealthList.Sort();
         _troopMountHealthList.Sort();
         _troopAmmoCountList.Sort();
 
-        // Compute bar values
         GetMediansAsInts(_troopHealthList, out int median, out int lowHalfMedian, out int highHalfMedian, out int max);
         HealthMedianPrc = median;
         HealthMedianLowHalfPrc = lowHalfMedian;
@@ -274,10 +249,8 @@ public class BetterTroopHudVM : ViewModel
         ArrowCountMaxPrc = max;
         return;
 
-        // Inner helper function to get median values
         void GetMediansAsInts(IReadOnlyList<float> prcList, out int median, out int lowHalfMedian, out int highHalfMedian, out int max)
         {
-            // Handle edge case, empty list
             if (prcList.Count == 0)
             {
                 median = 0;
@@ -287,7 +260,6 @@ public class BetterTroopHudVM : ViewModel
                 return;
             }
 
-            // Get median and max
             int medianIndex = prcList.Count / 2;
             median = (int)(prcList[prcList.Count / 2] * 100);
             max = (int)(prcList[prcList.Count - 1] * 100);
@@ -313,33 +285,33 @@ public class BetterTroopHudVM : ViewModel
 
         if (mission.Mode != MissionMode.Battle && mission.Mode != MissionMode.Stealth)
         {
-            DisplayDebugMessage(GameTexts.FindText("BTHUD_debug006").ToString());
+            DisplayDebugMessage($"[DEBUG 006] {GameTexts.FindText("BTHUD_debug006")}");
             return false;
         }
 
         if (mission.MainAgent == null)
         {
-            DisplayDebugMessage(GameTexts.FindText("BTHUD_debug007").SetTextVariable("status", "null").ToString());
+            DisplayDebugMessage($"[DEBUG 007] {GameTexts.FindText("BTHUD_debug007").SetTextVariable("status", "null")}");
             return false;
         }
 
         if (mission.MainAgent.Health.ApproximatelyEqualsTo(0.0f))
         {
-            DisplayDebugMessage(GameTexts.FindText("BTHUD_debug007").SetTextVariable("status", "dead").ToString());
+            DisplayDebugMessage($"[DEBUG 007] {GameTexts.FindText("BTHUD_debug007").SetTextVariable("status", "dead")}");
             return false;
         }
 
         Team? playerTeam = mission.PlayerTeam;
         if (playerTeam == null)
         {
-            DisplayDebugMessage(GameTexts.FindText("BTHUD_debug008").SetTextVariable("object", "mission.PlayerTeam").ToString());
+            DisplayDebugMessage($"[DEBUG 008] {GameTexts.FindText("BTHUD_debug008").SetTextVariable("object", "mission.PlayerTeam")}");
             return false;
         }
 
         orderController = playerTeam.PlayerOrderController;
         if (orderController == null)
         {
-            DisplayDebugMessage(GameTexts.FindText("BTHUD_debug008").SetTextVariable("object", "orderController").ToString());
+            DisplayDebugMessage($"DEBUG 009] {GameTexts.FindText("BTHUD_debug008").SetTextVariable("object", "orderController")}");
             return false;
         }
 
@@ -364,20 +336,20 @@ public class BetterTroopHudVM : ViewModel
                 // Skip non-agents
                 if (formationUnit is not Agent agent)
                 {
-                    DisplayDebugMessage(GameTexts.FindText("BTHUD_debug011").ToString());
+                    DisplayDebugMessage($"DEBUG 011] {GameTexts.FindText("BTHUD_debug011")}");
                     continue;
                 }
 
                 // Skip non-human agents
                 if (!agent.IsHuman)
                 {
-                    DisplayDebugMessage(GameTexts.FindText("BTHUD_debug009").ToString());
+                    DisplayDebugMessage($"[DEBUG 009] {GameTexts.FindText("BTHUD_debug009")}");
                     continue;
                 }
 
                 // Collect human agent health
                 float prcHealth = agent.Health / agent.HealthLimit;
-                DisplayDebugMessage(GameTexts.FindText("BTHUD_debug010").SetTextVariable("prcHealth", prcHealth).ToString());
+                DisplayDebugMessage($"[DEBUG 010] {GameTexts.FindText("BTHUD_debug010").SetTextVariable("prcHealth", prcHealth)}");
                 _troopHealthList.Add(prcHealth);
 
                 // Collect mount agent health, if applicable
@@ -385,7 +357,7 @@ public class BetterTroopHudVM : ViewModel
                 {
                     Agent mountAgent = agent.MountAgent;
                     float prcMountHealth = mountAgent.Health / mountAgent.HealthLimit;
-                    DisplayDebugMessage(GameTexts.FindText("BTHUD_debug012").SetTextVariable("prcMountHealth", prcMountHealth).ToString());
+                    DisplayDebugMessage($"[DEBUG 012] {GameTexts.FindText("BTHUD_debug012").SetTextVariable("prcMountHealth", prcMountHealth)}");
                     _troopMountHealthList.Add(prcMountHealth);
                 }
 
@@ -408,7 +380,7 @@ public class BetterTroopHudVM : ViewModel
                     }
 
                     float prcShieldHealth = (float)totHitPoints / totMaxHitPoints;
-                    DisplayDebugMessage(GameTexts.FindText("BTHUD_debug013").SetTextVariable("prcShieldHealth", prcShieldHealth).ToString());
+                    DisplayDebugMessage($"[DEBUG 013] {GameTexts.FindText("BTHUD_debug013").SetTextVariable("prcShieldHealth", prcShieldHealth)}");
                     _troopShieldHealthList.Add(prcShieldHealth);
                 }
 
@@ -438,7 +410,7 @@ public class BetterTroopHudVM : ViewModel
                     }
 
                     float prcAmmoCount = (float)totAmmo / totMaxAmmo;
-                    DisplayDebugMessage(GameTexts.FindText("BTHUD_debug014").SetTextVariable("prcAmmoCount", prcAmmoCount).ToString());
+                    DisplayDebugMessage($"[DEBUG 014] {GameTexts.FindText("BTHUD_debug014").SetTextVariable("prcAmmoCount", prcAmmoCount)}");
                     _troopAmmoCountList.Add(prcAmmoCount);
                 }
             }

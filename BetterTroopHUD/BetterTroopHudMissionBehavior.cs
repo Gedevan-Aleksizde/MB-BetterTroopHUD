@@ -14,8 +14,8 @@ public class BetterTroopHudMissionBehavior : MissionGauntletBattleUIBase
     public override void EarlyStart()
     {
         base.EarlyStart();
-        DisplayDebugMessage(GameTexts.FindText("BTHUD_debug100").ToString());
-        
+        DisplayDebugMessage($"[DEBUG 100] {GameTexts.FindText("BTHUD_debug100")}");
+
         _dataSource = new BetterTroopHudVM(Mission);
         _gauntletLayer = new GauntletLayer(1);
         _gauntletLayer.LoadMovie("BetterTroopHUD", _dataSource);
@@ -25,26 +25,25 @@ public class BetterTroopHudMissionBehavior : MissionGauntletBattleUIBase
     public override void AfterStart()
     {
         base.AfterStart();
-        
+
         DisplayDebugMessage("[DEBUG] AfterStart: called");
-        
+
         _dataSource?.Initialize();
     }
-    
+
     protected override void OnCreateView() => _dataSource.IsAgentStatusAvailable = true;
     protected override void OnDestroyView() => _dataSource.IsAgentStatusAvailable = false;
     public override void OnMissionScreenFinalize()
     {
         base.OnMissionScreenFinalize();
-        
+
         DisplayDebugMessage("[DEBUG] OnMissionScreenFinalize: called");
-        
-        // Clean up
+
         ScreenManager.TopScreen.RemoveLayer(_gauntletLayer);
         _gauntletLayer = null;
         _dataSource?.OnFinalize();
         _dataSource = null;
-    }    
+    }
     public override void OnMissionModeChange(MissionMode oldMissionMode, bool atStart)
     {
         base.OnMissionModeChange(oldMissionMode, atStart);
@@ -54,24 +53,27 @@ public class BetterTroopHudMissionBehavior : MissionGauntletBattleUIBase
     public override void OnMissionScreenTick(float dt)
     {
         base.OnMissionScreenTick(dt);
-        
+
         // _dataSource?.IsInDeployment = _isInDeployment; // todo
         _dataSource?.Tick(dt);
     }
 
+    /// <summary>
+    /// this function intend to hide UI at the photo mode
+    /// </summary>
+
     public override void OnPhotoModeActivated()
     {
         base.OnPhotoModeActivated();
-        
-        // Hide UI
         _gauntletLayer.UIContext.ContextAlpha = 0f;
     }
 
+    /// <summary>
+    /// re-activate UI when quitting the photo mode
+    /// </summary>
     public override void OnPhotoModeDeactivated()
     {
         base.OnPhotoModeDeactivated();
-        
-        // Un-hide UI
         _gauntletLayer.UIContext.ContextAlpha = 1f;
     }
 }
